@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/raidr_types",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "TypeScript types for the raidr API - MCP manifests, skills and sites",
   "type": "module",
   "main": "./dist/index.js",
@@ -48,7 +48,7 @@
   "author": "Sudobility Inc.",
   "license": "BUSL-1.1",
   "peerDependencies": {
-    "@sudobility/types": "^1.9.76",
+    "@sudobility/types": "^1.9.78",
     "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
@@ -58,7 +58,7 @@
   },
   "devDependencies": {
     "@eslint/js": "~9.39.5",
-    "@sudobility/types": "^1.9.76",
+    "@sudobility/types": "^1.9.78",
     "@typescript-eslint/eslint-plugin": "~8.72.0",
     "@typescript-eslint/parser": "~8.72.0",
     "eslint": "~9.39.5",
