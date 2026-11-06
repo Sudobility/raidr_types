@@ -117,9 +117,11 @@ export const jsonSchemaObjectSchema = z
 /** `McpAuth`, plus the per-style required field checks. */
 export const mcpAuthSchema = z
   .object({
-    style: z.enum(['bearer', 'header', 'cookie', 'none']),
+    style: z.enum(['bearer', 'header', 'cookie', 'query', 'none']),
+    credentialType: z.literal('api_key').optional(),
     headerName: z.string().min(1).optional(),
     cookieName: z.string().min(1).optional(),
+    queryName: z.string().min(1).optional(),
     tokenPrefix: z.string().optional(),
   })
   .refine((auth) => auth.style !== 'header' || !!auth.headerName, {
@@ -129,6 +131,10 @@ export const mcpAuthSchema = z
   .refine((auth) => auth.style !== 'cookie' || !!auth.cookieName, {
     message: 'cookieName is required when style is "cookie"',
     path: ['cookieName'],
+  })
+  .refine((auth) => auth.style !== 'query' || !!auth.queryName, {
+    message: 'queryName is required when style is "query"',
+    path: ['queryName'],
   }) satisfies z.ZodType<McpAuth>;
 
 /** `HttpMethod`. */

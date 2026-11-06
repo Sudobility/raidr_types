@@ -17,26 +17,30 @@ export interface JsonSchemaObject {
 }
 
 /**
- * How the user's token reaches the upstream API.
+ * How the caller's upstream credential reaches the API.
  * - `bearer`: `Authorization: <tokenPrefix><token>` (prefix defaults to `Bearer `)
  * - `header`: `<headerName>: <tokenPrefix><token>`
  * - `cookie`: `Cookie: <cookieName>=<token>`
+ * - `query`: `?<queryName>=<token>` (for provider API keys)
  * - `none`: the API needs no credential
  */
-export type McpAuthStyle = 'bearer' | 'header' | 'cookie' | 'none';
+export type McpAuthStyle = 'bearer' | 'header' | 'cookie' | 'query' | 'none';
 
 /**
  * Credential placement for one API host. raidr stores no credentials: the
- * caller supplies a token per MCP connection and raidr_api's `applyAuth`
- * places it as described here. The zod schema requires `headerName` for
- * `header` and `cookieName` for `cookie`.
+ * caller supplies one per MCP connection. The zod schema requires the
+ * placement name for header, cookie and query styles.
  */
 export interface McpAuth {
   style: McpAuthStyle;
+  /** An API key is supplied by the user, rather than captured by signing in. */
+  credentialType?: 'api_key';
   /** Required when style is `header`. */
   headerName?: string;
   /** Required when style is `cookie`. */
   cookieName?: string;
+  /** Required when style is `query`. */
+  queryName?: string;
   /**
    * Text placed before the token; defaults to `Bearer ` for bearer and empty
    * for header. Ignored for cookie.

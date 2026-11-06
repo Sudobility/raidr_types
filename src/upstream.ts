@@ -257,7 +257,33 @@ export function buildUpstreamRequest(
       pairs.push([param, valueToString(value)]);
     }
   }
-  const query = [templateQuery, encodePairs(pairs)].filter(Boolean).join('&');
+  // The credential is supplied separately from tool arguments. Remove any
+  // caller-controlled value for the reserved query name before inserting it.
+  if (manifest.auth.style === 'query' && manifest.auth.queryName) {
+    const name = manifest.auth.queryName;
+    for (let i = pairs.length - 1; i >= 0; i--)
+      if (pairs[i]![0] === name) pairs.splice(i, 1);
+    if (token) pairs.push([name, token]);
+  }
+  const safeTemplateQuery =
+    manifest.auth.style === 'query' && manifest.auth.queryName
+      ? templateQuery
+          .split('&')
+          .filter((part) => {
+            try {
+              return (
+                decodeURIComponent(part.split('=')[0]!.replace(/\+/g, ' ')) !==
+                manifest.auth.queryName
+              );
+            } catch {
+              return true;
+            }
+          })
+          .join('&')
+      : templateQuery;
+  const query = [safeTemplateQuery, encodePairs(pairs)]
+    .filter(Boolean)
+    .join('&');
   const url = `${base.protocol}://${base.host}${basePath}${path}${query ? `?${query}` : ''}`;
 
   const headers: Record<string, string> = {

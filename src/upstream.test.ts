@@ -88,6 +88,24 @@ const tool = (name: string): McpTool =>
   manifest.tools.find((t) => t.name === name)!;
 
 describe('buildUpstreamRequest', () => {
+  it('puts a supplied API key in its declared query parameter', () => {
+    const keyed = {
+      ...manifest,
+      auth: {
+        style: 'query' as const,
+        queryName: 'key',
+        credentialType: 'api_key' as const,
+      },
+    };
+    const req = buildUpstreamRequest(
+      keyed,
+      tool('get_user'),
+      { userId: 'u' },
+      'a+b&c'
+    );
+    expect(req.url).toContain('key=a%2Bb%26c');
+    expect(req.headers.Authorization).toBeUndefined();
+  });
   it('sends a Chrome User-Agent, which a manifest header can override', () => {
     const req = buildUpstreamRequest(
       manifest,

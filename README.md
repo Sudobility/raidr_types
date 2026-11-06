@@ -22,7 +22,9 @@ the root export and never pull zod.
 One `McpManifest` per API host. Each `McpTool` carries a JSON Schema input and
 an `McpToolRequest` that maps input fields onto path, query, header and body.
 The hosted MCP server in `raidr_api` proxies tool calls from that mapping and
-forwards the caller's `X-Raidr-Token` per `McpAuth`.
+forwards the caller's `X-Raidr-Token` per `McpAuth`. This connection header can
+carry a site session token or a user-supplied provider API key; `McpAuth`
+describes its header, cookie, bearer or query placement upstream.
 
 ## API docs
 

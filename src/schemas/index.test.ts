@@ -88,6 +88,18 @@ describe('mcpManifestSchema', () => {
 
   it('requires headerName for header auth and cookieName for cookie auth', () => {
     expect(
+      mcpManifestSchema.safeParse({
+        ...manifest,
+        auth: { style: 'query', credentialType: 'api_key' },
+      }).success
+    ).toBe(false);
+    expect(
+      mcpManifestSchema.safeParse({
+        ...manifest,
+        auth: { style: 'query', queryName: 'key', credentialType: 'api_key' },
+      }).success
+    ).toBe(true);
+    expect(
       mcpManifestSchema.safeParse({ ...manifest, auth: { style: 'header' } })
         .success
     ).toBe(false);
