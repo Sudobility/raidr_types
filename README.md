@@ -45,6 +45,33 @@ between raidr.app and the raidr extension (`BridgeRequest` / `BridgeResponse`,
 `TokenRequest`, `CapturedCredential`), and `RaidrSettings.siteTokens` holds
 tokens saved by `raidr token`.
 
+## Development
+
+Bun only. Clone, then:
+
+```bash
+bun install          # installs @sudobility/types (peer) and zod from GitHub Packages
+bun run verify       # typecheck + lint + test:unit + build (the full gate)
+```
+
+Individual scripts:
+
+| Command | Does |
+| --- | --- |
+| `bun run typecheck` | `tsc --noEmit` |
+| `bun run lint` | `eslint src --ext .ts` (prettier runs as a lint rule) |
+| `bun run test:unit` | `vitest run` (76 tests, 7 files) |
+| `bun run test:watch` | `vitest` in watch mode |
+| `bun run build` | `tsc -p tsconfig.esm.json` → `dist/` ESM with `.d.ts` + maps |
+| `bun run format` | `prettier --write` on `src` |
+| `bun run clean` | `rimraf dist` |
+
+`@sudobility/*` packages resolve from GitHub Packages (`.npmrc`); auth lives in
+`~/.npmrc`. There is no runtime to start — this is a types-only library; `dist/`
+is what gets published. CI (`johnqh/workflows` unified CI/CD) publishes to npm on
+push to `main`/`develop` when `NPM_TOKEN` is set; `prepublishOnly` runs
+`clean` then `verify`.
+
 ## Related projects
 
 - `raidr_api` — CRUD for manifests, skills, sites and API docs plus the hosted MCP server
