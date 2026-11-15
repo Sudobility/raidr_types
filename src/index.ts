@@ -6,17 +6,10 @@
  * same shapes live under `@sudobility/raidr_types/schemas` and need `zod`.
  */
 
+// Generic response types/helpers live in @sudobility/types; import them from
+// there directly rather than through raidr_types. The helpers below are kept as
+// raidr conveniences (they build @sudobility/types' envelopes).
 import type { BaseResponse, PaginatedResponse } from '@sudobility/types';
-
-// Re-export common types from @sudobility/types
-export type {
-  ApiResponse,
-  BaseResponse,
-  Optional,
-  PaginatedResponse,
-  PaginationInfo,
-  PaginationOptions,
-} from '@sudobility/types';
 
 export * from './mcp.js';
 export * from './entities.js';
