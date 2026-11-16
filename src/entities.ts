@@ -461,13 +461,5 @@ export interface SiteListQueryParams extends ListQueryParams {
   label?: string;
 }
 
-// =============================================================================
-// Health
-// =============================================================================
-
-/** Payload of raidr_api's `GET /` and `GET /health`. */
-export interface HealthCheckData {
-  name: string;
-  version: string;
-  status: 'healthy';
-}
+// Health payloads (`HealthCheckData` / `HealthResponse`) are the generic ones
+// from @sudobility/types, re-exported from this package's root (see index.ts).

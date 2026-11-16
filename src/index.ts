@@ -6,10 +6,21 @@
  * same shapes live under `@sudobility/raidr_types/schemas` and need `zod`.
  */
 
-// Generic response types/helpers live in @sudobility/types; import them from
-// there directly rather than through raidr_types. The helpers below are kept as
-// raidr conveniences (they build @sudobility/types' envelopes).
-import type { BaseResponse, PaginatedResponse } from '@sudobility/types';
+// Generic response types and their constructors are the canonical ones from
+// @sudobility/types — raidr_types does not define them, it re-exports them so
+// raidr consumers can keep importing from one package while the shapes stay
+// shared across every sudobility API.
+export type {
+  BaseResponse,
+  PaginatedResponse,
+  HealthResponse,
+  HealthCheckData,
+} from '@sudobility/types';
+export {
+  successResponse,
+  errorResponse,
+  paginatedResponse,
+} from '@sudobility/types';
 
 export * from './mcp.js';
 export * from './entities.js';
@@ -19,56 +30,3 @@ export * from './paths.js';
 export * from './credential.js';
 export * from './security.js';
 export * from './upstream.js';
-
-// =============================================================================
-// Response helpers
-// =============================================================================
-
-/**
- * Create a success envelope. The shape is `BaseResponse` from
- * `@sudobility/types` so every sudobility API answers the same way;
- * `timestamp` is stamped at call time.
- */
-export function successResponse<T>(data: T): BaseResponse<T> {
-  return {
-    success: true,
-    data,
-    timestamp: new Date().toISOString(),
-  };
-}
-
-/**
- * Create an error envelope. Typed `BaseResponse<never>` so it can be returned
- * from any handler regardless of that handler's success data type.
- */
-export function errorResponse(error: string): BaseResponse<never> {
-  return {
-    success: false,
-    error,
-    timestamp: new Date().toISOString(),
-  };
-}
-
-/**
- * Create a paginated list response from an offset/limit window.
- *
- * `hasNextPage` is derived from `offset + items.length < totalCount`, so it is
- * correct even when the last page is short. `pageSize` reports the requested
- * `limit`, not `items.length`.
- */
-export function paginatedResponse<T>(
-  items: T[],
-  window: { limit: number; offset: number; totalCount: number }
-): PaginatedResponse<T> {
-  return {
-    success: true,
-    data: items,
-    timestamp: new Date().toISOString(),
-    pagination: {
-      hasNextPage: window.offset + items.length < window.totalCount,
-      hasPreviousPage: window.offset > 0,
-      pageSize: window.limit,
-      totalCount: window.totalCount,
-    },
-  };
-}
