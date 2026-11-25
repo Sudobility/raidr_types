@@ -23,6 +23,7 @@ export {
 } from '@sudobility/types';
 
 export * from './mcp.js';
+export * from './usefulness.js';
 export * from './entities.js';
 export * from './apidoc.js';
 export * from './constants.js';

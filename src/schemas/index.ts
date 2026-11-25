@@ -7,6 +7,7 @@
  */
 
 import { z } from 'zod';
+import { usefulnessSchema } from '../usefulness.js';
 import type {
   EndpointLink,
   ApiDoc,
@@ -201,6 +202,7 @@ export const mcpToolSchema = z
         chunk: z.string().optional(),
       })
       .optional(),
+    usefulness: usefulnessSchema.optional(),
   })
   .superRefine((tool, ctx) => {
     const fields = new Set(Object.keys(tool.inputSchema.properties ?? {}));

@@ -2,6 +2,7 @@
  * MCP manifest: the declarative description of one API host that the hosted
  * raidr MCP server turns into tools. One manifest per API host.
  */
+import type { Usefulness } from './usefulness.js';
 
 /** A loose JSON Schema (draft 7 or 2020-12) value. */
 export type JsonSchema = Record<string, unknown>;
@@ -115,6 +116,8 @@ export interface McpTool {
   request: McpToolRequest;
   responseHints?: McpToolResponseHints;
   evidence?: McpToolEvidence;
+  /** Coarse heuristic signal of likely end-user usefulness; see {@link Usefulness}. */
+  usefulness?: Usefulness;
 }
 
 /** Provenance of a manifest: which capture bundle and crawler produced it. */
